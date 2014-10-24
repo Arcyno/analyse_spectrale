@@ -1,7 +1,7 @@
 %%% Algorithme de Levinson-Durbin pour la d\'etermination des param\`etres AR
 %%% Effet de la phase d'une sinuso\"{\i}de sur la DSP obtenue
 %%%
-%%% S. Rossignol -- 2012
+%%% S. Rossignol -- 2014
 
 clear;
 close all;
