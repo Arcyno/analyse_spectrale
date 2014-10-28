@@ -23,7 +23,6 @@ for ii=1:length(phase)
 
   [mmax, pmax] = max(mydsp);
   rapport(ii) = mydsp(round(length(ff)-1)/2+1)/mmax;            %%% rapport entre l'amplitude \`a la
-                                                                %%% fr\'equence 0 et l'amplitude du maximum
   position(ii)= abs(ff(pmax));                                  %%% position fr\'equentielle du max
                                                                 %%% note : elle peut \^etre en -f0 ou en +f0,
                                                                 %%%   d'o\`u l'abs
@@ -49,5 +48,5 @@ for ii=1:length(phase)
   drawnow;
 end;
 
-fprintf(1, 'nombre de succes %d (sur %d)\n', sum(position>=400 & position<=480), nphi);
+fprintf(1, 'nombre de succes %d (sur %d)\n', sum(position==420 & position<=460), nphi);
 
