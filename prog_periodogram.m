@@ -39,7 +39,7 @@ for frame = 1: nFrames
 end
 
 
-for frame = 1:15:nFrames
+for frame = 1:1:nFrames
     
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1: frames_length*(frame + 1)/2);
@@ -48,15 +48,15 @@ for frame = 1:15:nFrames
     [perio,perioAxe] = periodogram(data,time_Sampling,length_perio);
     
     
-%     % plot du périodogramme simple
-%     figure
-%     subplot(2,2,1)
-%     plot(time_frame,data);
-%     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
-%     subplot(2,2,3)
-%     plot(perioAxe(1:indice_plot),perio(1:indice_plot));
-%     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-%     title('périodogramme');
+    %     % plot du périodogramme simple
+    %     figure
+    %     subplot(2,2,1)
+    %     plot(time_frame,data);
+    %     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
+    %     subplot(2,2,3)
+    %     plot(perioAxe(1:indice_plot),perio(1:indice_plot));
+    %     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
+    %     title('périodogramme');
     
     
     
@@ -69,22 +69,22 @@ for frame = 1:15:nFrames
     [perio_fen,perioAxe] = periodogram(data_fen,time_Sampling,length_perio);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-%     % plot du périodogramme avec fenêtre
-%     subplot(2,2,2)
-%     plot(time_frame,data_fen);
-%     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
-%     title('Avec une fenêtre de pondération');
-%     subplot(2,2,4)
-%     plot(perioAxe(1:indice_plot),perio_fen(1:indice_plot));
-%     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-%     title('périodogramme');
+    %     % plot du périodogramme avec fenêtre
+    %     subplot(2,2,2)
+    %     plot(time_frame,data_fen);
+    %     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
+    %     title('Avec une fenêtre de pondération');
+    %     subplot(2,2,4)
+    %     plot(perioAxe(1:indice_plot),perio_fen(1:indice_plot));
+    %     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
+    %     title('périodogramme');
     
     
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Estimateur de Daniell
     
-    p = 10;
+    p = 5;
     %   data_perio_ext = zeros(length_perio + 2*p);
     %   data_perio_ext((p + 1):(p + length_perio)) = perio;
     %   perio_dan = zeros(length_perio + 2*p);
@@ -101,7 +101,7 @@ for frame = 1:15:nFrames
     perio_dan = (1/(2*p + 1))*perio_dan;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    figure
+    %figure
     % plot du signal
     subplot(2,2,1)
     plot(time_frame,data);
@@ -126,7 +126,7 @@ for frame = 1:15:nFrames
     % Estimateur de Bartlett
     
     % nombre de segments :
-    K = 8;
+    K = 4;
     % nombres d'échantillons par segment :
     M = floor(frames_length/K);
     
