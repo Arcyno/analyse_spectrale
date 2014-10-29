@@ -1,4 +1,4 @@
-%% test de reconnaissance d'une sinusoide pure.
+%% test de reconnaissance de  deux sinusoides pure.
 
 
 fe=32000;   %% fr\'equence d'\'echantillonnage  (en Hz)

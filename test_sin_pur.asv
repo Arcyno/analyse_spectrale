@@ -5,9 +5,11 @@ fe=32000;   %% fr\'equence d'\'echantillonnage  (en Hz)
 f0=440;     %% fr\'equence de la sinuso\"{\i}de (en Hz)
 tsig=1280;  %% longueur du signal               (en nombre d'\'echantillons)
 ordre=150;  %% ordre du mod\`ele AR
+bruit=0;
 
-
-xx=sin(2*pi*f0/fe*[1:tsig]);                        %%% construction du signal
+for k=0:9
+bruit = (rand(1,tsig)*-0.5)*k/5; %génération du bb
+xx=sin(2*pi*f0/fe*[1:tsig])+bruit;                        %%% construction du signal
 
 [aa, sigma2, ref, ff, mydsp] = mylevinsondurbin(xx,ordre,fe); %%% calcul du mod\`ele AR
 [mmax, pmax] = max(mydsp);
@@ -15,3 +17,7 @@ xx=sin(2*pi*f0/fe*[1:tsig]);                        %%% construction du signal
 abs(ff(pmax))
 'erreur'
 f0-abs(ff(pmax))
+indice = floor(length(ff)/2);
+subplot(2,10,k+1
+plot(ff(indice:indice+1000),mydsp(indice:indice+1000),'linewidth',2);
+end
