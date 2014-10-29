@@ -9,12 +9,11 @@ close all
 %   length_perio = 2*length_Signal;
   
   % Données
-  data = audioread('fluteircam.wav');
-  fs = 32000;
+  [data,fs] = audioread('fluteircam.wav');
   
   
   % sous-échantillonage
-  rapport = 20;
+  rapport = 1;
   data = data(1:rapport:length(data));
   fs = fs/rapport;
   
@@ -67,7 +66,7 @@ close all
 %   data_perio_ext = zeros(length_perio + 2*p);
 %   data_perio_ext((p + 1):(p + length_perio)) = perio;
 %   perio_dan = zeros(length_perio + 2*p);
-  perio_dan = zeros(1,length_perio);
+  perio_dan = zeros(length_perio,1);
   for i = 1:length_perio
       for n = (i - p):(i + p)
 %           perio_dan(p+i) = perio_dan(p+i) + data_perio_ext(p + n);
@@ -109,7 +108,7 @@ close all
   % nombres d'échantillons par segment :
   M = floor(length_Signal/K);
   
-  perio_bar = zeros(1,length_perio);
+  perio_bar = zeros(length_perio,1);
   for i = 0:(K-1)
      [miniperio,perioAxe] = periodogram(data((i*M + 1):((i+1)*M)),...
                                         time_Sampling,length_perio);
@@ -140,7 +139,7 @@ close all
   Norm = (fen')*fen;
   Norm = Norm*time_Sampling/M;
   
-  perio_wel = zeros(1,length_perio);
+  perio_wel = zeros(length_perio,1);
   for i = 0:(Kpr-1)
       [miniperio,perioAxe] = periodogram(fen.*data((i*S + 1):(i*S + M)),...
                                         time_Sampling,length_perio);
