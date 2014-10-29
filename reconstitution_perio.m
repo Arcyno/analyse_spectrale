@@ -50,11 +50,6 @@ for frame = 1:1:nFrames
     [perio,perioAxe] = periodogram(data,time_Sampling,length_perio);
     
     
-    % Detection de la fréquence principale
-    [nom_quelconque,f_main] = max(perio);
-    frames_freq(frame) = perioAxe(f_main);
-    
-    
     %     % plot du périodogramme simple
     %     figure
     %     subplot(2,2,1)
@@ -85,6 +80,13 @@ for frame = 1:1:nFrames
     %     plot(perioAxe(1:indice_plot),perio_fen(1:indice_plot));
     %     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     %     title('périodogramme');
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Detection de la fréquence principale
+    [nom_quelconque,f_main] = max(perio);
+    frames_freq(frame) = perioAxe(f_main);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
 
@@ -126,4 +128,4 @@ end
 
 figure
 plot(sortie(1:3*frames_length));
-soundsc(sortie,f_ech);
+% soundsc(sortie,f_ech);
