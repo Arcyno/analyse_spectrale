@@ -7,6 +7,7 @@ close all
 %   time_Sampling = median(diff(time));
 %   data = cos(64*pi*time);
 %   length_correlo = 2*length_Signal;
+%   f_ech = 1/time_Sampling;
 
 % Données
 [data,f_ech] = audioread('fluteircam.wav');
@@ -112,7 +113,7 @@ for frame = 1:1:nFrames
     subplot(2,2,3)
     plot(correloAxe(1:indice_plot),correlo(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-    title('périodogramme simple');
+    title('Correlogramme simple');
     
     % plot du périodogramme avec estimateur de Daniell
     subplot(2,2,2)
@@ -133,7 +134,7 @@ for frame = 1:1:nFrames
     correlo_bar = zeros(1,length_correlo);
     for i = 0:(K-1)
         [minicorrelo,correloAxe] = correlogram(data((i*M + 1):((i+1)*M)),...
-            time_Sampling,length_correlo);
+                                               time_Sampling,length_correlo);
         correlo_bar = correlo_bar + minicorrelo;
     end
     correlo_bar = (1/K)*correlo_bar;
