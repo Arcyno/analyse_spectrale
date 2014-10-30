@@ -128,4 +128,4 @@ end
 
 figure
 plot(sortie(1:3*frames_length));
-% soundsc(sortie,f_ech);
+soundsc(sortie,f_ech);
