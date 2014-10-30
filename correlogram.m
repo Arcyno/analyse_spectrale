@@ -10,5 +10,5 @@ function [correlo,correloAxe] = correlogram(data,timeSamp,correloLength);
   
   correlo = fft(coeffs,2*correloLength);
   correlo = correlo(1:correloLength);
-  correlo = timeSamp*correlo.*conj(correlo);
+  correlo = real(timeSamp*correlo.*conj(correlo));
 end
