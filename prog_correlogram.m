@@ -11,6 +11,7 @@ close all
 
 % Données
 [data,f_ech] = audioread('fluteircam.wav');
+[data,f_ech] = audioread('adroite.wav');
 
 
 % sous-échantillonage
@@ -26,6 +27,7 @@ time = time_Sampling*(0:length_Signal-1);
 
 
 % Plafond pour les plot
+fmax_plot = f_ech/2;
 fmax_plot = 2500;
 indice_plot = floor(length_correlo*fmax_plot/(f_ech/2));
 
@@ -45,11 +47,11 @@ for frame = 1:1:nFrames
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1: frames_length*(frame + 1)/2);
     
-    % Calcul du périodogramme
+    % Calcul du corrélogramme
     [correlo,correloAxe] = correlogram(data,time_Sampling,length_correlo);
     
     
-    %     % plot du périodogramme simple
+    %     % plot du corrélogramme simple
     %     figure
     %     subplot(2,2,1)
     %     plot(time_frame,data);
@@ -70,7 +72,7 @@ for frame = 1:1:nFrames
     [correlo_fen,correloAxe] = correlogram(data_fen,time_Sampling,length_correlo);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    %     % plot du périodogramme avec fenêtre
+    %     % plot du corrélogramme avec fenêtre
     %     subplot(2,2,2)
     %     plot(time_frame,data_fen);
     %     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
@@ -102,20 +104,20 @@ for frame = 1:1:nFrames
     correlo_dan = (1/(2*p + 1))*correlo_dan;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    %figure
+    figure
     % plot du signal
     subplot(2,2,1)
     plot(time_frame,data);
     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
     title('Signal');
     
-    % plot du périodogramme simple
+    % plot du corrélogramme simple
     subplot(2,2,3)
     plot(correloAxe(1:indice_plot),correlo(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     title('Correlogramme simple');
     
-    % plot du périodogramme avec estimateur de Daniell
+    % plot du corrélogramme avec estimateur de Daniell
     subplot(2,2,2)
     plot(correloAxe(1:indice_plot),correlo_dan(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
@@ -140,7 +142,7 @@ for frame = 1:1:nFrames
     correlo_bar = (1/K)*correlo_bar;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    % plot du périodogramme avec estimateur de Bartlett
+    % plot du correlogramme avec estimateur de Bartlett
     subplot(2,2,4)
     plot(correloAxe(1:indice_plot),correlo_bar(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
@@ -171,10 +173,21 @@ for frame = 1:1:nFrames
     correlo_wel = correlo_wel/(Kpr*Norm);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    % plot du périodogramme avec estimateur de Welsh
+    % plot du corrélogramme avec estimateur de Welsh
     subplot(2,2,1)
     plot(correloAxe(1:indice_plot),correlo_wel(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     title('Estimateur de Welsh');
     
 end
+
+% passage de variables pour la reconstitution
+length = length_correlo;
+save 'D:\Cours Supélec\3A\analyse_spectrale\variables' length...
+                                                       f_ech...
+                                                       data...
+                                                       time_Sampling...
+                                                       nFrames...
+                                                       frames_length...
+                                                       frames...
+                                                       time
