@@ -1,17 +1,35 @@
 clear
 close all
 
-load 'D:\Cours Supélec\3A\analyse_spectrale\variables'
+%load 'D:\Cours Supélec\3A\analyse_spectrale\variables'
 
+% Données
+[data,f_ech] = audioread('fluteircam.wav');
+% [data,f_ech] = audioread('adroite.wav');
+
+length_Signal = length(data);
+time_Sampling = 1/f_ech;
+length = 2048;
+time = time_Sampling*(0:length_Signal-1);
 
 % Plafond pour les plot
 fmax_plot = 2500;
 indice_plot = floor(length*fmax_plot/(f_ech/2));
 
+% Decomposition en frames
+frames_time = 0.04; % 40ms
+frames_length = floor(frames_time*f_ech);
+nFrames = (floor(length_Signal/frames_length))*2 - 1;
+frames = zeros(nFrames,frames_length);
+for frame = 1: nFrames
+    frames(frame,:) = data(frames_length*(frame - 1)/2 + 1: frames_length*(frame + 1)/2);
+end
+
 
 % Pour le stockage de la fréquence principale
 frames_freq = zeros(nFrames,1);
-
+% Pour le stockage de l'enveloppe spectrale
+frames_DSP = zeros(nFrames,length);
 
 for frame = 1:1:nFrames
     
@@ -29,13 +47,16 @@ for frame = 1:1:nFrames
     [fft_R,fft_Axe] = FFTR(data',time_Sampling,2*length);
     
     % Choix entre les méthodes
-    resultat = fft_R;
+    resultat = perio;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Detection de la fréquence principale
     [nom_quelconque,f_main] = max(resultat);
     frames_freq(frame) = perioAxe(f_main);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    % Stockage de l'enveloppe spectrale
+    frames_DSP(frame,:) = resultat;
     
 end
 
