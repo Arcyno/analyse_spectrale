@@ -20,14 +20,20 @@ for frame = 1:1:nFrames
     
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1):...
-                      frames_length*(frame + 1)/2);
+                      frames_length*(frame + 1)/2;
     
     % Calcul du périodogramme
     [perio,perioAxe] = periodogram(data,time_Sampling,length);
     
+    % Calcul du corrélogramme
+    [correlo,correloAxe] = periodogram(data,time_Sampling,length);
+    
+    % Choix entre les méthodes
+    resultat = correlo;
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Detection de la fréquence principale
-    [nom_quelconque,f_main] = max(perio);
+    [nom_quelconque,f_main] = max(resultat);
     frames_freq(frame) = perioAxe(f_main);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -38,6 +44,7 @@ end
 nb_voisins = 5;
 frames_freq = (1/nb_voisins)*conv(ones(1,nb_voisins),frames_freq);
 
+% création d'un vecteur pour le résultat de la reconstitution
 sortie = zeros(1,nFrames*frames_length);
 
 %% ajout cote a cote
