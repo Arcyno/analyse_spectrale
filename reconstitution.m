@@ -4,9 +4,6 @@ close all
 load 'D:\Cours Supélec\3A\analyse_spectrale\variables'
 
 
-% plot(data);
-
-
 % Plafond pour les plot
 fmax_plot = 2500;
 indice_plot = floor(length*fmax_plot/(f_ech/2));
@@ -28,8 +25,11 @@ for frame = 1:1:nFrames
     % Calcul du corrélogramme
     [correlo,correloAxe] = periodogram(data,time_Sampling,length);
     
+    % Calcul de la FFT
+    [fft_R,fft_Axe] = FFTR(data',time_Sampling,2*length);
+    
     % Choix entre les méthodes
-    resultat = correlo;
+    resultat = fft_R;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Detection de la fréquence principale
