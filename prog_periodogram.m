@@ -10,6 +10,7 @@ close all
 
 % Données
 [data,f_ech] = audioread('fluteircam.wav');
+[data,f_ech] = audioread('adroite.wav');
 
 
 % sous-échantillonage
@@ -25,6 +26,7 @@ time = time_Sampling*(0:length_Signal-1);
 
 
 % Plafond pour les plot
+fmax_plot = f_ech/2;
 fmax_plot = 2500;
 indice_plot = floor(length_perio*fmax_plot/(f_ech/2));
 
@@ -40,7 +42,7 @@ end
 
 
 % le pas, c'est pour tourner plus vite, tous les calculs ne sont pas faits...
-for frame = 1:15:nFrames
+for frame = 1:1:nFrames
     
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1:...
@@ -103,7 +105,7 @@ for frame = 1:15:nFrames
     perio_dan = (1/(2*p + 1))*perio_dan;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    %figure
+    figure
     % plot du signal
     subplot(2,2,1)
     plot(time_frame,data);
@@ -180,6 +182,7 @@ for frame = 1:15:nFrames
     
 end
 
+% passage de variables pour la reconstitution
 length = length_perio;
 save 'D:\Cours Supélec\3A\analyse_spectrale\variables' length...
                                                        f_ech...
