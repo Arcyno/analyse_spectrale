@@ -11,7 +11,7 @@ close all
 
 % Données
 [data,f_ech] = audioread('fluteircam.wav');
-[data,f_ech] = audioread('adroite.wav');
+% [data,f_ech] = audioread('adroite.wav');
 
 
 % sous-échantillonage
@@ -42,7 +42,7 @@ for frame = 1: nFrames
 end
 
 
-for frame = 1:1:nFrames
+for frame = 1:15:nFrames
     
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1: frames_length*(frame + 1)/2);
@@ -104,7 +104,9 @@ for frame = 1:1:nFrames
     correlo_dan = (1/(2*p + 1))*correlo_dan;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    figure
+    
+    % figure
+    
     % plot du signal
     subplot(2,2,1)
     plot(time_frame,data);
@@ -185,7 +187,6 @@ end
 length = length_correlo;
 save 'D:\Cours Supélec\3A\analyse_spectrale\variables' length...
                                                        f_ech...
-                                                       data...
                                                        time_Sampling...
                                                        nFrames...
                                                        frames_length...

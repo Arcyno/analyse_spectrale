@@ -13,14 +13,14 @@ f_ech = f_ech/rapport;
 
 length_Signal = length(data);
 time_Sampling = 1/f_ech;
-length_perio = 2048;
+length_fftr = 2048;
 time = time_Sampling*(0:length_Signal-1);
 % plot(data);
 
 
 % Plafond pour les plot
 fmax_plot = 2500;
-indice_plot = floor(length_perio*fmax_plot/(f_ech/2));
+indice_plot = floor(length_fftr*fmax_plot/(f_ech/2));
 
 
 % Decomposition en frames
@@ -44,57 +44,22 @@ for frame = 1:1:nFrames
     %     subplot(2,1,1)
     %     plot(time_frame,data);axis tight;grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
     %     subplot(2,1,2);hold on
-    [fft_R,fft_Axe] = FFTR(data',time_Sampling);
+    [fft_R,fft_Axe] = FFTR(data',time_Sampling,2*length_fftr);
     %     [fft_R_Max,fft_R_Idx] = max(fft_R);
     %     plot(fft_Axe,fft_R,'x');axis tight;grid on;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     %     plot(fft_Axe(fft_R_Idx),fft_R(fft_R_Idx),'ro');
     %     title('Transformée de Fourier discrète');
-    
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Detection de la fréquence principale
-    [nom_quelconque,f_main] = max(fft_R);
-    frames_freq(frame) = fft_Axe(f_main);
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 end
 
 
-% Lissage des fréquences
-nb_voisins = 5;
-frames_freq = (1/nb_voisins)*conv(ones(1,nb_voisins),frames_freq);
-
-sortie = zeros(1,nFrames*frames_length);
-
-%% ajout cote a cote
-phase_sup = 0;
-for frame = 0:nFrames-1
-    sortie(frame*frames_length/2+1:(frame+1)*frames_length/2) =...
-        cos(2*pi*frames_freq(frame+1)/f_ech*[0:frames_length/2-1]+phase_sup);
-    phase_sup = 2*pi*frames_freq(frame+1)/f_ech*(frames_length/2-1)+phase_sup;
-end
-
-%% superposition
-% phase_sup = 0;
-% phase_sup2 = 0;
-% phase_sup3 = 0;
-% phase_sup4 = 0;
-% fen = hamming(frames_length);
-% for frame = 0:nFrames-1
-%     sortie(frame*frames_length/2+1:frame*frames_length/2+frames_length) =...
-%         sortie(frame*frames_length/2+1:frame*frames_length/2+frames_length) + ...
-%         cos(2*pi*frames_freq(frame+1)/f_ech*[0:frames_length-1]+phase_sup).*fen'+ ...
-%         cos(4*pi*frames_freq(frame+1)/f_ech*[0:frames_length-1]+phase_sup2).*(fen/4)'+ ...
-%         cos(6*pi*frames_freq(frame+1)/f_ech*[0:frames_length-1]+phase_sup3).*(fen/8)'+ ...
-%         cos(8*pi*frames_freq(frame+1)/f_ech*[0:frames_length-1]+phase_sup4).*(fen/16)';
-%     phase_sup = 2*pi*frames_freq(frame+1)/f_ech*(frames_length-1)+phase_sup;
-% %     phase_sup2 = 4*pi*frames_freq(frame+1)/f_ech*(frames_length-1)+phase_sup2;
-% %     phase_sup3 = 6*pi*frames_freq(frame+1)/f_ech*(frames_length-1)+phase_sup3;
-% %     phase_sup4 = 8*pi*frames_freq(frame+1)/f_ech*(frames_length-1)+phase_sup4;
-%     phase_sup2 = phase_sup;
-%     phase_sup3 = phase_sup;
-%     phase_sup4 = phase_sup;
-% end
-
-figure
-plot(sortie(1:3*frames_length));
-% soundsc(sortie,f_ech);
+% passage de variables pour la reconstitution
+length = length_fftr;
+save 'D:\Cours Supélec\3A\analyse_spectrale\variables' length...
+                                                       f_ech...
+                                                       data...
+                                                       time_Sampling...
+                                                       nFrames...
+                                                       frames_length...
+                                                       frames...
+                                                       time
