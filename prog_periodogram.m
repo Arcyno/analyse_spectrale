@@ -1,37 +1,40 @@
 clear
 close all
 
-% % Données
+
+%% Données
 %   length_Signal = 512;
 %   time = (0:length_Signal-1)'/length_Signal;
 %   time_Sampling = median(diff(time));
 %   data = cos(64*pi*time);
 %   length_perio = 2*length_Signal;
 
-% Données
+
+%% Données
 [data,f_ech] = audioread('fluteircam.wav');
 [data,f_ech] = audioread('adroite.wav');
 
 
-% sous-échantillonage
+%% sous-échantillonage
 rapport = 1;
 data = data(1:rapport:length(data));
 f_ech = f_ech/rapport;
 
+
+%% Paramètres
 length_Signal = length(data);
 time_Sampling = 1/f_ech;
 length_perio = 2048;
 time = time_Sampling*(0:length_Signal-1);
-% plot(data);
 
 
-% Plafond pour les plot
+%% Plafond pour les plot
 fmax_plot = f_ech/2;
 fmax_plot = 2500;
 indice_plot = floor(length_perio*fmax_plot/(f_ech/2));
 
 
-% Decomposition en frames
+%% Decomposition en frames
 frames_time = 0.04; % 40ms
 frames_length = floor(frames_time*f_ech);
 nFrames = (floor(length_Signal/frames_length))*2 - 1;
@@ -41,14 +44,14 @@ for frame = 1: nFrames
 end
 
 
-% le pas, c'est pour tourner plus vite, tous les calculs ne sont pas faits...
+%% le pas, c'est pour tourner plus vite, tous les calculs ne sont pas faits...
 for frame = 1:1:nFrames
     
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1:...
                       frames_length*(frame + 1)/2);
     
-    % Calcul du périodogramme
+    %% Calcul du périodogramme
     [perio,perioAxe] = periodogram(data,time_Sampling,length_perio);
     
     
@@ -63,15 +66,12 @@ for frame = 1:1:nFrames
     %     title('périodogramme');
     
     
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Avec une fenêtre de pondération
+    %% Avec une fenêtre de pondération
     windowSine = Window_Raised_Frac_Sine(frames_length,floor(frames_length/20),2,[0.1 1]);
     windowSine = windowSine';
     data_fen = data.*windowSine;
     
     [perio_fen,perioAxe] = periodogram(data_fen,time_Sampling,length_perio);
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     %     % plot du périodogramme avec fenêtre
     %     subplot(2,2,2)
@@ -82,11 +82,9 @@ for frame = 1:1:nFrames
     %     plot(perioAxe(1:indice_plot),perio_fen(1:indice_plot));
     %     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     %     title('périodogramme');
+
     
-    
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Estimateur de Daniell
+    %% Estimateur de Daniell
     
     p = 5;
     %   data_perio_ext = zeros(length_perio + 2*p);
@@ -103,7 +101,6 @@ for frame = 1:1:nFrames
     end
     %   perio_dan = perio_dan((10 + 1):(10 + length_perio));
     perio_dan = (1/(2*p + 1))*perio_dan;
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     figure
     % plot du signal
@@ -125,9 +122,7 @@ for frame = 1:1:nFrames
     title('Estimateur de Daniell');
     
     
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Estimateur de Bartlett
+    %% Estimateur de Bartlett
     
     % nombre de segments :
     K = 4;
@@ -141,7 +136,6 @@ for frame = 1:1:nFrames
         perio_bar = perio_bar + miniperio;
     end
     perio_bar = (1/K)*perio_bar;
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % plot du périodogramme avec estimateur de Bartlett
     subplot(2,2,4)
@@ -150,9 +144,7 @@ for frame = 1:1:nFrames
     title('Estimateur de Bartlett');
     
     
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Estimateur de Welsh
+    %% Estimateur de Welsh
     
     % Décalage entre deux tranches
     S = 20;
@@ -172,7 +164,6 @@ for frame = 1:1:nFrames
     Norm = fen*(fen');
     Norm = Norm*time_Sampling/M;
     perio_wel = perio_wel/(Kpr*Norm);
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % plot du périodogramme avec estimateur de Welsh
     subplot(2,2,1)
@@ -182,7 +173,8 @@ for frame = 1:1:nFrames
     
 end
 
-% % passage de variables pour la reconstitution
+
+%% passage de variables pour la reconstitution
 % length = length_perio;
 % save 'D:\Cours Supélec\3A\analyse_spectrale\variables' length...
 %                                                        f_ech...
