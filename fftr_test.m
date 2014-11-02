@@ -41,8 +41,8 @@ title('Signal');
 
 fmin_plot = 0;
 fmax_plot = f_ech/2;
-fmin_plot = 200;
-fmax_plot = 600;
+fmin_plot = 250;
+fmax_plot = 800;
 indice_plot = floor(length_fftr*fmax_plot/(f_ech/2));
 indice_plot2 = floor(length_fftr*fmin_plot/(f_ech/2));
 
