@@ -3,6 +3,7 @@ close all
 
 
 %% Paramètres
+
 length_Signal = 2048;
 % time = (0:length_Signal-1)/length_Signal;
 % time_Sampling = median(diff(time))
@@ -12,7 +13,9 @@ time_Sampling = 1/f_ech;
 time = time_Sampling*(0:length_Signal-1);
 f0 = 440;
 
+
 %% Données
+
 % Sinusoide pure
 data = cos(f0*2*pi*time);
 % Deux raies proches // sinusoide à amplitude variable
@@ -27,12 +30,15 @@ f = f0/2 + f0*[1:length_Signal]/length_Signal;
 data = cos(2*pi*f.*time);
 
 
+%% Plot du signal
+
 plot(time, data);
 grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
 title('Signal');
 
 
-%% Bornes pour les plot
+%% Bornes pour les plot des periodogrammes
+
 fmin_plot = 0;
 fmax_plot = f_ech/2;
 fmin_plot = 200;
@@ -41,23 +47,13 @@ indice_plot = floor(length_perio*fmax_plot/(f_ech/2));
 indice_plot2 = floor(length_perio*fmin_plot/(f_ech/2));
 
 
-
 %% Calcul du périodogramme
+
 [perio,perioAxe] = periodogram(data,time_Sampling,length_perio);
 
 
-%     % plot du périodogramme simple
-%     figure
-%     subplot(2,2,1)
-%     plot(time,data);
-%     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
-%     subplot(2,2,3)
-%     plot(perioAxe(indice_plot2:indice_plot),perio(indice_plot2:indice_plot));
-%     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-%     title('périodogramme');
-
-
 %% Avec une fenêtre de pondération
+
 windowSine = Window_Raised_Frac_Sine(length_Signal,floor(length_Signal/20),2,[0.1 1]);
 windowSine = windowSine';
 data_fen = data.*windowSine;
@@ -93,25 +89,6 @@ end
 %   perio_dan = perio_dan((10 + 1):(10 + length_perio));
 perio_dan = (1/(2*p + 1))*perio_dan;
 
-figure
-% plot du signal
-subplot(2,2,1)
-plot(time,data);
-grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
-title('Signal');
-
-% plot du périodogramme simple
-subplot(2,2,3)
-plot(perioAxe(indice_plot2:indice_plot),perio(indice_plot2:indice_plot));
-grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-title('périodogramme simple');
-
-% plot du périodogramme avec estimateur de Daniell
-subplot(2,2,2)
-plot(perioAxe(indice_plot2:indice_plot),perio_dan(indice_plot2:indice_plot));
-grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-title('Estimateur de Daniell');
-
 
 %% Estimateur de Bartlett
 
@@ -127,12 +104,6 @@ for i = 0:(K-1)
     perio_bar = perio_bar + miniperio;
 end
 perio_bar = (1/K)*perio_bar;
-
-% plot du périodogramme avec estimateur de Bartlett
-subplot(2,2,4)
-plot(perioAxe(indice_plot2:indice_plot),perio_bar(indice_plot2:indice_plot));
-grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-title('Estimateur de Bartlett');
 
 
 %% Estimateur de Welsh
@@ -156,16 +127,38 @@ Norm = fen*(fen');
 Norm = Norm*time_Sampling/M;
 perio_wel = perio_wel/(Kpr*Norm);
 
-% plot du périodogramme avec estimateur de Welsh
+
+%% Plots
+
+figure
+
+% plot du périodogramme simple
 subplot(2,2,1)
+plot(perioAxe(indice_plot2:indice_plot),perio(indice_plot2:indice_plot));
+grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
+title('périodogramme simple');
+
+% plot du périodogramme avec estimateur de Daniell
+subplot(2,2,2)
+plot(perioAxe(indice_plot2:indice_plot),perio_dan(indice_plot2:indice_plot));
+grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
+title('Estimateur de Daniell');
+
+% plot du périodogramme avec estimateur de Bartlett
+subplot(2,2,3)
+plot(perioAxe(indice_plot2:indice_plot),perio_bar(indice_plot2:indice_plot));
+grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
+title('Estimateur de Bartlett');
+
+% plot du périodogramme avec estimateur de Welsh
+subplot(2,2,4)
 plot(perioAxe(indice_plot2:indice_plot),perio_wel(indice_plot2:indice_plot));
 grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
 title('Estimateur de Welsh');
 
 
-
-
 %% passage de variables pour la reconstitution
+%
 % length = length_perio;
 % save 'D:\Cours Supélec\3A\analyse_spectrale\variables' length...
 %                                                        f_ech...
