@@ -42,7 +42,7 @@ title('Signal');
 fmin_plot = 0;
 fmax_plot = f_ech/2;
 fmin_plot = 200;
-fmax_plot = 400;
+fmax_plot = 600;
 indice_plot = floor(length_correlo*fmax_plot/(f_ech/2));
 indice_plot2 = floor(length_correlo*fmin_plot/(f_ech/2));
 
@@ -68,7 +68,7 @@ data_fen = data.*windowSine;
 %     subplot(2,2,4)
 %     plot(correloAxe(indice_plot2:indice_plot),correlo_fen(indice_plot2:indice_plot));
 %     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-%     title('périodogramme');
+%     title('correlogramme');
 
 
 %% Estimateur de Daniell
@@ -132,25 +132,25 @@ correlo_wel = correlo_wel/(Kpr*Norm);
 
 figure
 
-% plot du périodogramme simple
+% plot du correlogramme simple
 subplot(2,2,1)
 plot(correloAxe(indice_plot2:indice_plot),correlo(indice_plot2:indice_plot));
 grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
-title('périodogramme simple');
+title('correlogramme simple');
 
-% plot du périodogramme avec estimateur de Daniell
+% plot du correlogramme avec estimateur de Daniell
 subplot(2,2,2)
 plot(correloAxe(indice_plot2:indice_plot),correlo_dan(indice_plot2:indice_plot));
 grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
 title('Estimateur de Daniell');
 
-% plot du périodogramme avec estimateur de Bartlett
+% plot du correlogramme avec estimateur de Bartlett
 subplot(2,2,3)
 plot(correloAxe(indice_plot2:indice_plot),correlo_bar(indice_plot2:indice_plot));
 grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
 title('Estimateur de Bartlett');
 
-% plot du périodogramme avec estimateur de Welsh
+% plot du correlogramme avec estimateur de Welsh
 subplot(2,2,4)
 plot(correloAxe(indice_plot2:indice_plot),correlo_wel(indice_plot2:indice_plot));
 grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
