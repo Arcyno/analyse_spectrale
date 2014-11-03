@@ -21,9 +21,9 @@ data = cos(f0*2*pi*time);
 % Deux raies proches // sinusoide à amplitude variable
 data = cos(f0*2*pi*time) + cos((f0+5)*2*pi*time);
 % Une sinusoide et du bruit
-bruit_blanc = rand(1,length_Signal);
+bruit_blanc = 2*rand(1,length_Signal)-1;
 bruit_gaussien = randn(1,length_Signal);
-bruit = bruit_gaussien*2;
+bruit = bruit_blanc*2;
 data = cos(f0*2*pi*time) + bruit;
 % Sinusoide de fréquence variable
 f = f0/2 + f0*[1:length_Signal]/length_Signal;
@@ -41,8 +41,8 @@ title('Signal');
 
 fmin_plot = 0;
 fmax_plot = f_ech/2;
-fmin_plot = 200;
-fmax_plot = 600;
+fmin_plot = 2;
+fmax_plot = 2000;
 indice_plot = floor(length_correlo*fmax_plot/(f_ech/2));
 indice_plot2 = floor(length_correlo*fmin_plot/(f_ech/2));
 

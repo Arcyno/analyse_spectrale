@@ -12,7 +12,7 @@ close all
 
 %% Données
 [data,f_ech] = audioread('fluteircam.wav');
-[data,f_ech] = audioread('adroite.wav');
+%[data,f_ech] = audioread('adroite.wav');
 
 
 %% sous-échantillonage
@@ -45,7 +45,7 @@ end
 
 
 %% le pas, c'est pour tourner plus vite, tous les calculs ne sont pas faits...
-for frame = 1:1:nFrames
+for frame = 1:15:nFrames
     
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1:...
@@ -104,13 +104,13 @@ for frame = 1:1:nFrames
     
     figure
     % plot du signal
-    subplot(2,2,1)
+    subplot(2,2,4)
     plot(time_frame,data);
     grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
     title('Signal');
     
     % plot du périodogramme simple
-    subplot(2,2,3)
+    subplot(2,2,1)
     plot(perioAxe(1:indice_plot),perio(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     title('périodogramme simple');
@@ -138,7 +138,7 @@ for frame = 1:1:nFrames
     perio_bar = (1/K)*perio_bar;
     
     % plot du périodogramme avec estimateur de Bartlett
-    subplot(2,2,4)
+    subplot(2,2,3)
     plot(perioAxe(1:indice_plot),perio_bar(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     title('Estimateur de Bartlett');
@@ -166,7 +166,7 @@ for frame = 1:1:nFrames
     perio_wel = perio_wel/(Kpr*Norm);
     
     % plot du périodogramme avec estimateur de Welsh
-    subplot(2,2,1)
+    subplot(2,2,4)
     plot(perioAxe(1:indice_plot),perio_wel(1:indice_plot));
     grid on;axis tight;xlabel('Frequency (Hz)');ylabel('Amplitude (a. u.)');
     title('Estimateur de Welsh');

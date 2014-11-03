@@ -11,7 +11,7 @@ length_perio = length_Signal;
 f_ech = 8000;
 time_Sampling = 1/f_ech;
 time = time_Sampling*(0:length_Signal-1);
-f0 = 440;
+f0 = 100;
 
 
 %% Données
@@ -21,7 +21,7 @@ data = cos(f0*2*pi*time);
 % Deux raies proches // sinusoide à amplitude variable
 data = cos(f0*2*pi*time) + cos((f0+5)*2*pi*time);
 % Une sinusoide et du bruit
-bruit_blanc = rand(1,length_Signal);
+bruit_blanc = 2*rand(1,length_Signal)-1;
 bruit_gaussien = randn(1,length_Signal);
 bruit = bruit_gaussien*2;
 data = cos(f0*2*pi*time) + bruit;
@@ -33,7 +33,7 @@ data = cos(2*pi*f.*time);
 %% Plot du signal
 
 plot(time, data);
-grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');
+grid on;xlabel('Time (s)');ylabel('Amplitude (a. u.)');axis tight;
 title('Signal');
 
 
@@ -41,8 +41,8 @@ title('Signal');
 
 fmin_plot = 0;
 fmax_plot = f_ech/2;
-fmin_plot = 200;
-fmax_plot = 600;
+fmin_plot = 2;
+fmax_plot = 2000;
 indice_plot = floor(length_perio*fmax_plot/(f_ech/2));
 indice_plot2 = floor(length_perio*fmin_plot/(f_ech/2));
 
