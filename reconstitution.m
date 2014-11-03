@@ -3,20 +3,23 @@ close all
 
 %load 'D:\Cours Supélec\3A\analyse_spectrale\variables'
 
-% Données
+%% Données
 [data,f_ech] = audioread('fluteircam.wav');
 % [data,f_ech] = audioread('adroite.wav');
+
 
 length_Signal = length(data);
 time_Sampling = 1/f_ech;
 length = 2048;
 time = time_Sampling*(0:length_Signal-1);
 
-% Plafond pour les plot
+
+%% Plafond pour les plot
 fmax_plot = 2500;
 indice_plot = floor(length*fmax_plot/(f_ech/2));
 
-% Decomposition en frames
+
+%% Decomposition en frames
 frames_time = 0.04; % 40ms
 frames_length = floor(frames_time*f_ech);
 nFrames = (floor(length_Signal/frames_length))*2 - 1;
@@ -25,10 +28,9 @@ for frame = 1: nFrames
     frames(frame,:) = data(frames_length*(frame - 1)/2 + 1: frames_length*(frame + 1)/2);
 end
 
-
-% Pour le stockage de la fréquence principale
+%Pour le stockage de la fréquence principale
 frames_freq = zeros(nFrames,1);
-% Pour le stockage de l'enveloppe spectrale
+%Pour le stockage de l'enveloppe spectrale
 frames_DSP = zeros(nFrames,length);
 
 for frame = 1:1:nFrames
@@ -61,14 +63,17 @@ for frame = 1:1:nFrames
 end
 
 
-% Lissage des fréquences
-nb_voisins = 5;
+%% Lissage des fréquences
+nb_voisins = 2;
 frames_freq = (1/nb_voisins)*conv(ones(1,nb_voisins),frames_freq);
+
+
+%% Reconstitution
 
 % création d'un vecteur pour le résultat de la reconstitution
 sortie = zeros(1,nFrames*frames_length);
 
-%% ajout cote a cote
+% ajout cote a cote
 phase_sup = 0;
 for frame = 0:nFrames-1
     sortie(frame*frames_length/2+1:(frame+1)*frames_length/2) =...
@@ -76,7 +81,7 @@ for frame = 0:nFrames-1
     phase_sup = 2*pi*frames_freq(frame+1)/f_ech*(frames_length/2-1)+phase_sup;
 end
 
-%% superposition
+% superposition
 % phase_sup = 0;
 % phase_sup2 = 0;
 % phase_sup3 = 0;
@@ -100,4 +105,7 @@ end
 
 figure
 plot(sortie(1:3*frames_length));
+figure
+plot(frames_freq);
+title('partition de flute');
 soundsc(sortie,f_ech);
