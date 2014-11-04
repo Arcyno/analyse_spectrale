@@ -37,7 +37,7 @@ for frame = 1:1:nFrames
     
     data = frames(frame,:);
     time_frame = time(frames_length*(frame - 1)/2 + 1):...
-                      frames_length*(frame + 1)/2;
+        frames_length*(frame + 1)/2;
     
     % Calcul du périodogramme
     [perio,perioAxe] = periodogram(data,time_Sampling,length);
@@ -64,7 +64,7 @@ end
 
 
 %% Lissage des fréquences
-nb_voisins = 2;
+nb_voisins = 3;
 frames_freq = (1/nb_voisins)*conv(ones(1,nb_voisins),frames_freq);
 
 
@@ -75,10 +75,28 @@ sortie = zeros(1,nFrames*frames_length);
 
 % ajout cote a cote
 phase_sup = 0;
+% for frame = 0:nFrames-1
+%     sortie(frame*frames_length/2+1:(frame+1)*frames_length/2) =...
+%         cos(2*pi*frames_freq(frame+1)/f_ech*[0:frames_length/2-1]+phase_sup);
+%     phase_sup = 2*pi*frames_freq(frame+1)/f_ech*(frames_length/2-1)+phase_sup;
+% end
+
+
+% ajout cote a cote + harmoniques
+phase_sup = 0;
+phase_sup2 = 0;
+phase_sup3 = 0;
+phase_sup4 = 0;
 for frame = 0:nFrames-1
     sortie(frame*frames_length/2+1:(frame+1)*frames_length/2) =...
-        cos(2*pi*frames_freq(frame+1)/f_ech*[0:frames_length/2-1]+phase_sup);
+        cos(2*pi*frames_freq(frame+1)/f_ech*[0:frames_length/2-1]+phase_sup)+ ...
+        cos(4*pi*frames_freq(frame+1)/f_ech*[0:frames_length/2-1]+phase_sup2)*(1/2)'+ ...
+        cos(6*pi*frames_freq(frame+1)/f_ech*[0:frames_length/2-1]+phase_sup3)*(1/3)'+ ...
+        cos(8*pi*frames_freq(frame+1)/f_ech*[0:frames_length/2-1]+phase_sup4)*(1/4)';
     phase_sup = 2*pi*frames_freq(frame+1)/f_ech*(frames_length/2-1)+phase_sup;
+    phase_sup2 = 4*pi*frames_freq(frame+1)/f_ech*(frames_length/2-1)+phase_sup2;
+    phase_sup3 = 6*pi*frames_freq(frame+1)/f_ech*(frames_length/2-1)+phase_sup3;
+    phase_sup4 = 8*pi*frames_freq(frame+1)/f_ech*(frames_length/2-1)+phase_sup4;
 end
 
 % superposition
